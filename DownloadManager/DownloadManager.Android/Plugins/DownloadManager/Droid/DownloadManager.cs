@@ -7,6 +7,7 @@ using Android.Database;
 using Android.Content;
 using Plugins.DownloadManager.Interfaces;
 using System.IO;
+using DownloadManager;
 
 namespace Plugins.DownloadManager.Droid
 {
@@ -162,6 +163,7 @@ namespace Plugins.DownloadManager.Droid
                     downloadFile.DestinationPathName = cursor.GetString(cursor.GetColumnIndex("local_uri"));
                     downloadFile.StatusDetails = default(string);
                     downloadFile.Status = DownloadFileStatus.COMPLETED;
+                    DownloadPaths.Current.MoveFile(downloadFile.Url);
                     RemoveFile(downloadFile);                    
                     break;
 

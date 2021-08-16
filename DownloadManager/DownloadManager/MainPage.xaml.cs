@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace DownloadManager
 {
@@ -16,23 +17,22 @@ namespace DownloadManager
             bool exists = File.Exists(local);
             if (!exists)
             {
-                var file = App.DownloadManager.CreateDownloadFile(url);
-                file.PropertyChanged += (sender, e) =>
+                if (!App.DownloadManager.Queue.Any(item => item.Url == url))
                 {
-                    if (e.PropertyName == nameof(file.Status))
+                    var file = App.DownloadManager.CreateDownloadFile(url);
+                    file.PropertyChanged += (sender, e) =>
                     {
-                        if(file.Status == Plugins.DownloadManager.Interfaces.DownloadFileStatus.COMPLETED)
+                        if (e.PropertyName == nameof(file.Status))
                         {
-                            App.DownloadPaths.MoveFile(url);
+                            if (file.Status == Plugins.DownloadManager.Interfaces.DownloadFileStatus.FAILED)
+                            {
+                                throw new Exception(file.StatusDetails);
+                            }
                         }
-                        else if(file.Status == Plugins.DownloadManager.Interfaces.DownloadFileStatus.FAILED)
-                        {
-                            throw new Exception(file.StatusDetails);
-                        }
-                    }
-                };
+                    };
 
-                App.DownloadManager.Start(file);
+                    App.DownloadManager.Start(file);
+                }
             }
         }
     }

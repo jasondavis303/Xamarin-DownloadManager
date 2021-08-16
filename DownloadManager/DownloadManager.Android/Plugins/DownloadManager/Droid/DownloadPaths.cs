@@ -8,8 +8,11 @@ namespace Plugins.DownloadManager.Droid
 {
     public class DownloadPaths : IDownloadPaths
     {
-        public DownloadPaths()
+        public static readonly DownloadPaths Current = new DownloadPaths();
+
+        private DownloadPaths()
         {
+            //Skip media scanner in this app
             using (var fs = File.Create(Path.Combine(TempDirectory, ".nomedia"))) { }
             using (var fs = File.Create(Path.Combine(DownloadDirectory, ".nomedia"))) { }
         }
@@ -45,29 +48,33 @@ namespace Plugins.DownloadManager.Droid
             }
         }
 
-        public string GetTempPath(string url)
+        public string GetTempPath(string url) => GetTempPath(new Uri(url));
+
+        public string GetTempPath(Uri uri)
         {
-            Uri uri = new Uri(url);
-            string ret = Path.Combine(TempDirectory, $"{uri.DnsSafeHost}{uri.LocalPath}");
+            string ret = Path.Combine(TempDirectory, uri.GetLocalHostPath());
             Directory.CreateDirectory(Path.GetDirectoryName(ret));
             return ret;
         }
 
-        public string GetLocalPath(string url)
+        public string GetLocalPath(string url) => GetLocalPath(new Uri(url));
+
+        public string GetLocalPath(Uri uri)
         {
-            Uri uri = new Uri(url);
-            string ret = Path.Combine(DownloadDirectory, $"{uri.DnsSafeHost}{uri.LocalPath}");
+            string ret = Path.Combine(DownloadDirectory, uri.GetLocalHostPath());
             Directory.CreateDirectory(Path.GetDirectoryName(ret));
             return ret;
         }
 
-        public void MoveFile(string url)
+        public void MoveFile(string url) => MoveFile(new Uri(url));
+        
+        public void MoveFile(Uri uri)
         {
-            string local = GetLocalPath(url);
+            string local = GetLocalPath(uri);
             if (File.Exists(local))
                 File.Delete(local);
 
-            File.Move(GetTempPath(url), local);
+            File.Move(GetTempPath(uri), local);
         }
     }
 }

@@ -19,6 +19,27 @@ namespace Plugins.DownloadManager.Droid
             Status = DownloadFileStatus.INITIALIZED;
         }
 
+        /**
+         * Reinitializing an object after the app restarted
+         */
+        public DownloadFile(ICursor cursor)
+        {
+            Id = cursor.GetLong(cursor.GetColumnIndex(Android.App.DownloadManager.ColumnId));
+            Url = cursor.GetString(cursor.GetColumnIndex(Android.App.DownloadManager.ColumnUri));
+
+            Status = (DownloadStatus)cursor.GetInt(cursor.GetColumnIndex(Android.App.DownloadManager.ColumnStatus)) switch
+            {
+                DownloadStatus.Failed => DownloadFileStatus.FAILED,
+                DownloadStatus.Paused => DownloadFileStatus.PAUSED,
+                DownloadStatus.Pending => DownloadFileStatus.PENDING,
+                DownloadStatus.Running => DownloadFileStatus.RUNNING,
+                DownloadStatus.Successful => DownloadFileStatus.COMPLETED,
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        }
+
+
+
         public long Id { get; set; }
 
         public string Url { get; set; }
@@ -88,25 +109,6 @@ namespace Plugins.DownloadManager.Droid
                 _totalBytesWritten = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalBytesWritten)));
             }
-        }
-
-        /**
-         * Reinitializing an object after the app restarted
-         */
-        public DownloadFile(ICursor cursor)
-        {
-            Id = cursor.GetLong(cursor.GetColumnIndex(Android.App.DownloadManager.ColumnId));
-            Url = cursor.GetString(cursor.GetColumnIndex(Android.App.DownloadManager.ColumnUri));
-
-            Status = (DownloadStatus)cursor.GetInt(cursor.GetColumnIndex(Android.App.DownloadManager.ColumnStatus)) switch
-            {
-                DownloadStatus.Failed => DownloadFileStatus.FAILED,
-                DownloadStatus.Paused => DownloadFileStatus.PAUSED,
-                DownloadStatus.Pending => DownloadFileStatus.PENDING,
-                DownloadStatus.Running => DownloadFileStatus.RUNNING,
-                DownloadStatus.Successful => DownloadFileStatus.COMPLETED,
-                _ => throw new ArgumentOutOfRangeException(),
-            };
         }
 
         public void StartDownload(Android.App.DownloadManager downloadManager, string destinationPathName, bool allowedOverMetered, DownloadVisibility notificationVisibility)
