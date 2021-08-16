@@ -13,7 +13,7 @@ namespace DownloadManager
 
             string url = "https://s3.us-west-1.wasabisys.com/s3xp-demo-bucket-1/image%201.png";
 
-            string local = App.DownloadPaths.GetLocalPath(url);
+            string local = App.DownloadManager.GetLocalPath(url);
             bool exists = File.Exists(local);
             if (!exists)
             {

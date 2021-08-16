@@ -3,6 +3,7 @@ using Plugins.DownloadManager.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 
 namespace Plugins.DownloadManager.iOS
@@ -95,6 +96,57 @@ namespace Plugins.DownloadManager.iOS
                 _queue.Remove(file);
             }
             CollectionChanged?.Invoke(Queue, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, file));
+        }
+
+
+
+        public string DownloadDirectory
+        {
+            get
+            {
+                string ret = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library", "Caches", "Downloaded");
+                Directory.CreateDirectory(ret);
+                return ret;
+            }
+        }
+
+        public string TempDirectory
+        {
+            get
+            {
+                string ret = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "..", "Library", "tmp");
+                Directory.CreateDirectory(ret);
+                return ret;
+            }
+        }
+
+        public string GetTempPath(string url) => GetTempPath(new Uri(url));
+
+        public string GetTempPath(Uri uri)
+        {
+            string ret = Path.Combine(TempDirectory, uri.GetLocalHostPath());
+            Directory.CreateDirectory(Path.GetFileName(ret));
+            return ret;
+        }
+
+        public string GetLocalPath(string url) => GetLocalPath(new Uri(url));
+
+        public string GetLocalPath(Uri uri)
+        {
+            string ret = Path.Combine(DownloadDirectory, uri.GetLocalHostPath());
+            Directory.CreateDirectory(Path.GetFileName(ret));
+            return ret;
+        }
+
+        public void MoveFile(string url) => MoveFile(new Uri(url));
+
+        public void MoveFile(Uri uri)
+        {
+            string local = GetLocalPath(uri);
+            if (File.Exists(local))
+                File.Delete(local);
+
+            File.Move(GetTempPath(uri), local);
         }
     }
 }

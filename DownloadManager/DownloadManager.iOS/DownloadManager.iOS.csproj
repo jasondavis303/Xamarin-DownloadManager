@@ -72,7 +72,6 @@
     <None Include="Info.plist" />
     <Compile Include="Plugins\DownloadManager\iOS\DownloadFile.cs" />
     <Compile Include="Plugins\DownloadManager\iOS\DownloadManager.cs" />
-    <Compile Include="Plugins\DownloadManager\iOS\DownloadPaths.cs" />
     <Compile Include="Plugins\DownloadManager\iOS\UrlSessionDownloadDelegate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

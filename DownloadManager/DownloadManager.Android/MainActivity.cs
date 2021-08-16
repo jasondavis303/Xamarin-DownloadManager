@@ -18,9 +18,8 @@ namespace DownloadManager.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            App.DownloadPaths = Plugins.DownloadManager.Droid.DownloadPaths.Current;
             App.DownloadManager = Plugins.DownloadManager.Droid.DownloadManager.Current;
-            Plugins.DownloadManager.Droid.DownloadManager.Current.PathNameForDownloadedFile = (file) => Plugins.DownloadManager.Droid.DownloadPaths.Current.GetTempPath(file.Url);
+            Plugins.DownloadManager.Droid.DownloadManager.Current.PathNameForDownloadedFile = (file) => Plugins.DownloadManager.Droid.DownloadManager.Current.GetTempPath(file.Url);
 
             LoadApplication(new App());
         }

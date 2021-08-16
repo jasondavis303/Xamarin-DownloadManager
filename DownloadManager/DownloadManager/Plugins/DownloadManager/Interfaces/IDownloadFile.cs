@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Plugins.DownloadManager.Interfaces
@@ -99,5 +100,10 @@ namespace Plugins.DownloadManager.Interfaces
         /// </summary>
         /// <value>The total bytes written.</value>
         long TotalBytesWritten { get; }
+
+        /// <summary>
+        /// Gets the local path where the download will be saved
+        /// </summary>
+        string LocalPath { get; }
     }
 }

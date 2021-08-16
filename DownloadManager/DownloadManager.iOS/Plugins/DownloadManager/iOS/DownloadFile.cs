@@ -81,6 +81,7 @@ namespace Plugins.DownloadManager.iOS
             }
         }
 
+        public string LocalPath => DownloadManager.Current.GetLocalPath(Url);
 
         public DownloadFile(string url, IDictionary<string, string> headers)
         {

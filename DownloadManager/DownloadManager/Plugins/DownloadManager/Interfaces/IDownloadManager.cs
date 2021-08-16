@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace Plugins.DownloadManager.Interfaces
@@ -52,5 +53,20 @@ namespace Plugins.DownloadManager.Interfaces
         /// </summary>
         /// <returns>void</returns>
         void AbortAll();
+
+        /// <summary>
+        /// Directory  where downloads are stored
+        /// </summary>
+        string DownloadDirectory { get; }
+
+        /// <summary>
+        /// Directory where a url will be saved
+        /// </summary>
+        string GetLocalPath(string url);
+
+        /// <summary>
+        /// Directory where a url will be saved
+        /// </summary>
+        string GetLocalPath(Uri uri);
     }
 }

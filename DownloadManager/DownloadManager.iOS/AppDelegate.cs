@@ -26,9 +26,8 @@ namespace DownloadManager.iOS
         {
             global::Xamarin.Forms.Forms.Init();
 
-            App.DownloadPaths = Plugins.DownloadManager.iOS.DownloadPaths.Current;
             App.DownloadManager = Plugins.DownloadManager.iOS.DownloadManager.Current;
-            Plugins.DownloadManager.iOS.DownloadManager.Current.PathNameForDownloadedFile = (file) => App.DownloadPaths.GetLocalPath(file.Url);
+            Plugins.DownloadManager.iOS.DownloadManager.Current.PathNameForDownloadedFile = (file) => Plugins.DownloadManager.iOS.DownloadManager.Current.GetLocalPath(file.Url);
             
             LoadApplication(new App());
 

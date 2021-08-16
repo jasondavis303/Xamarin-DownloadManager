@@ -25,7 +25,5 @@ namespace DownloadManager
         }
 
         public static IDownloadManager DownloadManager { get; set; }
-
-        public static IDownloadPaths DownloadPaths { get; set; }
     }
 }

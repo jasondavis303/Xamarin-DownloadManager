@@ -62,7 +62,6 @@
     <Compile Include="Plugins\DownloadManager\Droid\DownloadCompletedBroadcastReceiver.cs" />
     <Compile Include="Plugins\DownloadManager\Droid\DownloadFile.cs" />
     <Compile Include="Plugins\DownloadManager\Droid\DownloadManager.cs" />
-    <Compile Include="Plugins\DownloadManager\Droid\DownloadPaths.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -111,6 +111,8 @@ namespace Plugins.DownloadManager.Droid
             }
         }
 
+        public string LocalPath => DownloadManager.Current.GetLocalPath(Url);
+
         public void StartDownload(Android.App.DownloadManager downloadManager, string destinationPathName, bool allowedOverMetered, DownloadVisibility notificationVisibility)
         {
             using var downloadUrl = Uri.Parse(Url);
