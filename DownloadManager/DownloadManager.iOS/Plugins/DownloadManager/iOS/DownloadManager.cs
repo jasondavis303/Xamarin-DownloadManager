@@ -125,7 +125,7 @@ namespace Plugins.DownloadManager.iOS
         public string GetTempPath(Uri uri)
         {
             string ret = Path.Combine(TempDirectory, uri.GetLocalHostPath());
-            Directory.CreateDirectory(Path.GetFileName(ret));
+            Directory.CreateDirectory(Path.GetDirectoryName(ret));
             return ret;
         }
 
@@ -134,7 +134,7 @@ namespace Plugins.DownloadManager.iOS
         public string GetLocalPath(Uri uri)
         {
             string ret = Path.Combine(DownloadDirectory, uri.GetLocalHostPath());
-            Directory.CreateDirectory(Path.GetFileName(ret));
+            Directory.CreateDirectory(Path.GetDirectoryName(ret));
             return ret;
         }
 
