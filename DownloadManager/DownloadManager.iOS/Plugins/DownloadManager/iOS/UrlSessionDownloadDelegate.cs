@@ -6,11 +6,13 @@ namespace Plugins.DownloadManager.iOS
 {
     public class UrlSessionDownloadDelegate : NSObject, INSUrlSessionDownloadDelegate
     {
-        public DownloadManager Controller;
+        public static readonly UrlSessionDownloadDelegate Current = new UrlSessionDownloadDelegate();
+
+        private UrlSessionDownloadDelegate() { }
 
         protected DownloadFile GetDownloadFileByTask(NSUrlSessionTask downloadTask)
         {
-            return Controller.Queue
+            return DownloadManager.Current.Queue
                 .Cast<DownloadFile>()
                 .FirstOrDefault(
                     i => i.Task != null &&
@@ -41,7 +43,7 @@ namespace Plugins.DownloadManager.iOS
 
             file.StatusDetails = error.LocalizedDescription;
             file.Status = DownloadFileStatus.FAILED;
-            Controller.RemoveFile(file);
+            DownloadManager.Current.RemoveFile(file);
         }
 
 
@@ -75,12 +77,12 @@ namespace Plugins.DownloadManager.iOS
             {
                 file.StatusDetails = "Error.HttpCode: " + response.StatusCode;
                 file.Status = DownloadFileStatus.FAILED;
-                Controller.RemoveFile(file);
+                DownloadManager.Current.RemoveFile(file);
                 return;
             }
 
             var success = true;
-            var destinationPathName = Controller.PathNameForDownloadedFile?.Invoke(file);
+            var destinationPathName = DownloadManager.Current.PathNameForDownloadedFile?.Invoke(file);
             if (destinationPathName != null)
             {
                 success = MoveDownloadedFile(file, location, destinationPathName);
@@ -93,9 +95,9 @@ namespace Plugins.DownloadManager.iOS
 
             // If the file destination is unknown or was moved successfully ...
             if (success)
-                file.Status = DownloadFileStatus.COMPLETED;            
+                file.Status = DownloadFileStatus.COMPLETED;
 
-            Controller.RemoveFile(file);
+            DownloadManager.Current.RemoveFile(file);
         }
 
         public bool MoveDownloadedFile(DownloadFile file, NSUrl location, string destinationPathName)

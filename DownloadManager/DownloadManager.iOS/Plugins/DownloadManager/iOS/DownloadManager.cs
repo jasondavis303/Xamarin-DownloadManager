@@ -15,21 +15,18 @@ namespace Plugins.DownloadManager.iOS
     {
         public static readonly DownloadManager Current = new DownloadManager();
 
-        private static readonly UrlSessionDownloadDelegate _sessionDownloadDelegate = new UrlSessionDownloadDelegate();
-
         private string _identifier => NSBundle.MainBundle.BundleIdentifier + ".BackgroundTransferSession";
 
         private readonly NSUrlSession _backgroundSession;
         
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
-        public DownloadManager ()
+        private DownloadManager ()
         {
             _queue = new List<IDownloadFile>();
-            _sessionDownloadDelegate.Controller = this;
-
+            
             using (var configuration = NSUrlSessionConfiguration.CreateBackgroundSessionConfiguration(_identifier))
-                _backgroundSession = NSUrlSession.FromConfiguration(configuration, _sessionDownloadDelegate, null);
+                _backgroundSession = NSUrlSession.FromConfiguration(configuration, UrlSessionDownloadDelegate.Current, null);
 
             // Reinitialize tasks that were started before the app was terminated or suspended
             _backgroundSession.GetTasks2((dataTasks, uploadTasks, downloadTasks) =>
